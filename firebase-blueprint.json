@@ -1,0 +1,71 @@
+{
+  "entities": {
+    "Contact": {
+      "title": "Contact Submission",
+      "description": "A business lead inquiry submitted through the contact page",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The full name of the lead sender"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The email address of the lead sender"
+        },
+        "phone": {
+          "type": "string",
+          "description": "The optional phone number of the lead sender"
+        },
+        "services": {
+          "type": "array",
+          "description": "The list of service IDs requested by the lead"
+        },
+        "message": {
+          "type": "string",
+          "description": "The message text containing project details"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The server-validated timestamp of submission"
+        }
+      },
+      "required": ["name", "email", "phone", "services", "message", "createdAt"]
+    },
+    "Subscriber": {
+      "title": "Newsletter Subscriber",
+      "description": "A user email enrolled in the newsletter subscription list",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The subscriber's email address"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The server-validated enrollment timestamp"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "unsubscribed"],
+          "description": "Status of the subscription"
+        }
+      },
+      "required": ["email", "createdAt", "status"]
+    }
+  },
+  "firestore": {
+    "contacts/{contactId}": {
+      "schema": "Contact",
+      "description": "Inquiries submitted by prospective leads"
+    },
+    "subscribers/{subscriberId}": {
+      "schema": "Subscriber",
+      "description": "Subscribers registered for the newsletter"
+    }
+  }
+}

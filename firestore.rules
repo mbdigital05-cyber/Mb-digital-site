@@ -1,0 +1,78 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 1. Global Safety Net (Deny-All by default)
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- REUSABLE SECURITY PRIMITIVES & HELPERS ---
+    
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Role check - strictly requires verification of the email status as well
+    function isAdmin() {
+      return isSignedIn() &&
+             request.auth.token.email.lower() == 'mb@mbdigital.com.ng' &&
+             request.auth.token.email_verified == true;
+    }
+
+    // Path variable hardening regex & size guard
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // --- ENTITY MATCH CHECKS ---
+
+    function isValidContact(data) {
+      return data.name is string && data.name.size() > 0 && data.name.size() <= 256 &&
+             data.email is string && data.email.size() > 0 && data.email.size() <= 256 &&
+             data.phone is string && data.phone.size() <= 30 &&
+             data.message is string && data.message.size() > 0 && data.message.size() <= 5000 &&
+             data.services is list && data.services.size() >= 1 && data.services.size() <= 10 &&
+             data.services[0] is string &&
+             data.createdAt == request.time;
+    }
+
+    function isValidSubscriber(data) {
+      return data.email is string && data.email.size() > 0 && data.email.size() <= 255 &&
+             data.createdAt == request.time &&
+             data.status == 'active';
+    }
+
+    // --- COLLECTION GATES ---
+
+    match /contacts/{contactId} {
+      // Create is public but strictly schema validated and sized bounded (no ghost fields)
+      allow create: if isValidId(contactId) &&
+                       isValidContact(incoming()) &&
+                       incoming().keys().hasAll(['name', 'email', 'phone', 'services', 'message', 'createdAt']) &&
+                       incoming().keys().size() == 6;
+
+      // Only the verified administrator can retrieve, update, or clear lead entries
+      allow read, update, delete: if isAdmin();
+    }
+
+    match /subscribers/{subscriberId} {
+      // Create is public for self-subscription
+      allow create: if isValidId(subscriberId) &&
+                       isValidSubscriber(incoming()) &&
+                       incoming().keys().hasAll(['email', 'createdAt', 'status']) &&
+                       incoming().keys().size() == 3;
+
+      // Only the administrator can read or manage newsletter subscribers
+      allow read, update, delete: if isAdmin();
+    }
+  }
+}
