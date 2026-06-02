@@ -10,6 +10,7 @@ import Admin from "./pages/Admin";
 import CookieConsent from "./components/CookieConsent";
 import WhatsAppButton from "./components/WhatsAppButton";
 import Newsletter from "./components/Newsletter";
+import VoiceAgent from "./components/VoiceAgent";
 
 export default function App() {
   return (
@@ -29,6 +30,7 @@ export default function App() {
       <Footer />
       <CookieConsent />
       <WhatsAppButton />
+      <VoiceAgent />
     </div>
   );
 }
