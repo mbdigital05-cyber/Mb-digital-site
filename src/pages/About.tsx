@@ -1,7 +1,12 @@
+import React, { useEffect } from "react";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function About() {
+  useEffect(() => {
+    document.title = "About Us | MB Digital - Premium Creative Agency in Abuja";
+  }, []);
+
   return (
     <div className="pt-20">
       <section className="relative pt-40 pb-32 lg:pt-48 lg:pb-40 overflow-hidden bg-[#0A0A0A]">

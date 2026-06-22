@@ -1,9 +1,14 @@
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { SERVICES } from "@/src/constants";
 import * as Icons from "lucide-react";
 
 export default function Services() {
+  useEffect(() => {
+    document.title = "Our Creative & Digital Services | MB Digital Abuja";
+  }, []);
+
   return (
     <div className="pt-20">
       <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-[#0A0A0A]">

@@ -19,6 +19,7 @@ export default function Contact() {
   const [validationError, setValidationError] = useState("");
 
   useEffect(() => {
+    document.title = "Contact Us | MB Digital - Consultant with our Creative Strategists";
     // If coming from a specific service page, pre-check it
     const stateUrlParams = location.state as { serviceId?: string } | null;
     if (stateUrlParams?.serviceId) {

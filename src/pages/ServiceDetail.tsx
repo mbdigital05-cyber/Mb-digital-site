@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Navigate, Link } from "react-router-dom";
 import { ArrowRight, CheckCircle2, Loader2, Send } from "lucide-react";
 import { SERVICES } from "@/src/constants";
@@ -8,6 +8,12 @@ export default function ServiceDetail() {
   const { id } = useParams();
   
   const service = SERVICES.find(s => s.id === id);
+
+  useEffect(() => {
+    if (service) {
+      document.title = `${service.title} | Premium Services - MB Digital Abuja`;
+    }
+  }, [service]);
   
   const [formData, setFormData] = useState({ 
     name: "", 

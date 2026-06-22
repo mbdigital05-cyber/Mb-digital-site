@@ -33,6 +33,7 @@ export default function Admin() {
   const [endDate, setEndDate] = useState<string>("");
 
   useEffect(() => {
+    document.title = "Admin Portal | MB Digital Dashboard";
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
         if (currentUser.email?.toLowerCase() === "mb@mbdigital.com.ng") {

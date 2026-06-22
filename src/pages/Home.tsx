@@ -1,11 +1,15 @@
+import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Star } from "lucide-react";
 import { SERVICES, TESTIMONIALS } from "@/src/constants";
 import * as Icons from "lucide-react";
 import { motion, useScroll, useTransform } from "motion/react";
-import { useRef } from "react";
 
 export default function Home() {
+  useEffect(() => {
+    document.title = "MB Digital | Creative Strategy & Digital Agency in Abuja, Nigeria";
+  }, []);
+
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
